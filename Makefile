@@ -1,18 +1,34 @@
 
+ifdef SystemRoot
+   RM = del /Q
+else
+   ifeq ($(shell uname), Linux)
+      RM = rm -f
+   endif
+endif
+
 all: chroma.min.js
 
 clean:
-	@rm chroma.js chroma.min.js license.coffee
+	$(RM) chroma.js chroma.min.js license.coffee
 
 license.coffee: LICENSE
-	@echo "###*" > $@          \
-	echo " * @license" >> $@  \
-	echo " *" >> $@           \
-	while read i              \
-	do                        \
-	   echo " * $i"  >> $@    \
-	done < LICENSE            \
-	echo "###" >> $@
+ifdef SystemRoot	
+	@echo ###* > $@
+	echo * @license >> $@
+	echo * >> $@
+	type LICENSE >> $@
+	echo ### >> $@
+else
+    @echo "###*" > $@          \
+    echo " * @license" >> $@  \
+    echo " *" >> $@           \
+    while read i              \
+    do                        \
+       echo " * $i"  >> $@    \
+    done < LICENSE            \
+    echo "###" >> $@
+endif
 
 chroma.js: license.coffee src/api.coffee src/color.coffee src/conversions/*.coffee  src/scale.coffee src/limits.coffee src/colors/*.coffee src/utils.coffee src/interpolate.coffee
 	@coffee -o . -j $@ $^
