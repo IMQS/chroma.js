@@ -66,6 +66,8 @@ chroma.contrast = (a, b) ->
 chroma.luminance = (color) ->
     chroma(color).luminance()
 
+chroma.lch2rgb = (l, c, h) ->
+    lch2rgb(l, c, h)
 
 # exposing raw classes for testing purposes
 
